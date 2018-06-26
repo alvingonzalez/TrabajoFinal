@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+
+
+		<div class="card-body border-primary mb-3">
+
+			<h4 class="card-title">
+				<a th:href="@{/empleado/nuevo/}" class="btn btn-primary btn-xs">Nuevo
+					Empleado</a>
+			</h4>
+
+
+			<nav th:replace="cliente/paginator-nav :: paginator"></nav>
+
+
+			<div class="row justify-content-center">
+
+				<div class=".col-xs-6 .col-sm-3" th:each="empleado: ${empleados}">
+					<div class="card">
+						<img class="card-img-top" th:src="@{/images/cliente.jpg}"
+							width="30" height="200" alt="Mi Imagen"> <a
+							class="btn btn-primary btn-xs"
+							th:href="@{'/empleado/detalle' + ${empleado.idEmpleado}}">Detail</a>
+
+						<div class="card-body">
+							<h4 class="card-title" th:text="${empleado.nombreEmpleado}">Aaron</h4>
+							<p class="card-text" th:text="${empleado.apellidoEmpleado}">Flores</p>
+							<p class="card-text" th:text="${empleado.direccionEmpleado}">76523213</p>
+							<p class="card-text" th:text="${empleado.tipoempleado.tipoempleado}">76523213</p>
+							<p class="card-text" th:text="${empleado.telefonoEmpleado}">118923</p>
+							<p class="card-text" th:text="${empleado.correoEmpleado}">aaron98@gmail.com</p>
+					
+							<a href="#"
+								th:href="@{'/empleado/editar/' + ${empleado.idEmpleado}}"
+								th:text="'editar'" class="btn btn-primary">Edit</a> <a href="#"
+								th:href="@{'/empleado/eliminar/'+ ${empleado.idEmpleado}}"
+								th:text="'delete'"
+								onclick="return confirm('¿Estas seguro de eliminar al Empleado?');"
+								class="btn btn-danger">Delete</a> 
+							<a href="#"	th:href="@{'/empleado/editar/'+ ${empleado.idEmpleado}}"
+								class="btn btn-success">Invoice</a>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		<nav th:replace="cliente/paginator-nav :: paginator"></nav>
+		</div>
+		
+					
+	</div>
+
+
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

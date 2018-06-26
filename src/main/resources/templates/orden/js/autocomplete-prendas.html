@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<script type="text/javascript" th:fragment="javascript">
+		$(document).ready(function() {
+
+			$("#buscarPrenda").autocomplete({
+
+				source : function(request, response) {
+					$.ajax({
+						url : "/orden/cargarPrenda/" + request.term,
+						dataType : "json",
+						data : {
+							term : request.term
+						},
+						success : function(data) {
+							response($.map(data, function(item) {
+								return {
+									value : item.idPrenda,
+									label : item.nombrePrenda,
+									marca : item.marcaPrenda,
+									tipoPrenda: item.tipoPrenda.nombrePrenda,
+									precio : item.precioPrenda,				
+								};
+							}));
+						},
+					});
+				},
+				select : function(event, ui) {
+					
+					if(itemsHelper.hasProduct(ui.item.value)){
+						itemsHelper.incrementaCantidad(ui.item.value, ui.item.precio);
+						return false;
+					}
+					
+					var line = $("#templateItemsOrdenes").html();
+					
+					line = line.replace(/{ID}/g, ui.item.value);
+					line = line.replace(/{NOMBRE}/g, ui.item.label);
+					line = line.replace(/{MARCA}/g, ui.item.marca);
+					line = line.replace(/{TIPOPRENDA}/g, ui.item.tipoPrenda);
+					line = line.replace(/{PRECIO}/g, ui.item.precio);
+					
+					$("#cargarPrendas tbody").append(line);
+					itemsHelper.calculateAmount(ui.item.value, ui.item.precio, 1);
+
+					return false;
+				}
+			});
+			
+			$("form").submit(function(){
+				$("#templateItemsOrdenes").remove();
+				return;
+			});
+
+		});
+		
+		var itemsHelper = {
+				calculateAmount: function(id, precio, cantidad){
+					$("#total_amount_" + id).html(parseInt(precio) * parseInt(cantidad));
+					this.calculateGranTotal();
+				},
+			hasProduct: function(id){
+				
+				var result = false;
+				
+				$('input[name="item_id[]"]').each(function(){
+					if(parseInt(id) == parseInt($(this).val()) ){
+						result = true;
+					}
+				});
+				
+				return result;
+			},
+			incrementaCantidad: function(id,precio ){
+				var cantidad = $("#cantidad_" + id).val() ? parseInt($("#cantidad_" + id).val()) : 0;
+				$("#cantidad_" + id).val(++cantidad);
+				this.calculateAmount(id,precio,cantidad);
+			},
+			deleteLineInvoice: function(id){
+				$("#row_" + id).remove();
+				this.calculateGranTotal();
+			},
+			calculateGranTotal: function(){
+				var total = 0;
+				
+				$('span[id^="total_amount_"]').each(function(){
+					total += parseInt($(this).html());
+				});
+				
+				$('#gran_total').html(total);
+			}
+		}
+	</script>
+</body>
+</html>

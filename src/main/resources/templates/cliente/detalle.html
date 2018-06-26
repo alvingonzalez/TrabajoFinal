@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	
+	<div class="container py-4 ">
+
+		<div class="card bg-light ">
+			<div class="card-header text-white bg-dark" th:text="${titulo}"></div>
+			<div class="card-body">
+
+				<h4 class="card-title">
+					<a class="btn btn-primary btn-xs"
+						th:href="@{'/orden/nuevaOrden/' + ${cliente.idCliente}}"
+						th:text="'Nueva Orden'"></a>
+				</h4>
+
+
+				<ul class="list-group">
+					<li class="list-group-item active" th:text="${cliente.nombreCliente}"></li>
+					<li class="list-group-item" th:text="${cliente.apellidoCliente}"></li>
+					<li class="list-group-item" th:text="${cliente.dni}"></li>
+					<li class="list-group-item" th:text="${cliente.nombreEmpresa}"></li>
+					<li class="list-group-item" th:text="${cliente.correoCliente}"></li>
+					<li class="list-group-item" th:text="${cliente.rucEmpresa}"></li>
+					<li class="list-group-item" th:text="${cliente.pais}"></li>
+				</ul>
+
+
+			</div>
+
+		</div>
+
+		<div class="card bg-light">
+			<div class="card-header text-white bg-dark">Ordenes</div>
+			<div class="card-body">
+
+				<div th:if="${#lists.isEmpty(cliente.ordenes)}"
+					class="alert alert-info my-4"
+					th:text="'No existen ordenes asignadas al cliente ' + ${cliente.nombreCliente} + ' ' + ${cliente.apellidoCliente}"></div>
+
+				<table th:if="${not #lists.isEmpty(cliente.ordenes)}"
+					class="table">
+					<thead>
+						<tr>
+							<th>Number</th>
+							<th>Fecha Solicitud</th>
+							<th>Empleado</th>
+							<th>Estado</th>
+							<th>Detalle</th>
+							<th>Eliminar</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="orden: ${cliente.ordenes}">
+							<td th:text="${orden.idOrden}"></td>
+							<td th:text="${orden.fechaSolicitud}"></td>
+							<td th:text="${orden.empleado}"></td>
+							<td th:switch="${orden.estadoOrden}">
+								<span th:case="${0}"> PRE ORDEN</span>
+								<span th:case="${1}"> APROBADA</span>
+								<span th:case="${2}"> EN PRODUCCION</span>
+								<span th:case="${3}"> TERMINADA</span>
+							</td>
+							<td ><a class="btn btn-primary btn-xs"
+								th:href="@{'/orden/detalle/'+ ${orden.idOrden}}"
+								th:text="'detalle'"></a></td>
+							<td ><a class="btn btn-danger btn-xs"
+								th:href="@{'/orden/detalle/'+ ${orden.idOrden}}"
+								th:text="'Eliminar'"
+								onclick="return confirm('Estas seguro de eliminar orden?');"></a></td>
+						</tr>
+					</tbody>
+
+				</table>
+
+			</div>
+		</div>
+	</div>
+
+	
+	
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

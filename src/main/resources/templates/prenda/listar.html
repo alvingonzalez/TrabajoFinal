@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+
+
+		<div class="card-body border-primary mb-3">
+
+			<h4 class="card-title">
+				<a th:href="@{/prenda/nueva/}" class="btn btn-primary btn-xs">NuevaPrenda</a>
+			</h4>
+
+			<nav th:replace="prenda/paginator-nav :: paginator"></nav>
+			
+			<div class="row justify-content-center">
+
+				<div class=".col-xs-6 .col-sm-3" th:each="prenda: ${prendas}">
+					<div class="card">
+						<img class="card-img-top" th:src="@{/images/prenda.png}"
+							width="30" height="200" alt="Mi Imagen"> 
+							<a class="btn btn-primary btn-xs"
+							th:href="@{'/prenda/detalle/' + ${prenda.idPrenda}}">Detalle</a>
+
+						<div class="card-body">
+							<h4 class="card-title" th:text="${prenda.marcaPrenda}"> marca</h4>
+							
+							<a href="#" th:href="@{'/prenda/edita/' + ${prenda.idPrenda}}"
+								th:text="'Editar'" class="btn btn-primary">Editar</a> 
+							<a href="#" th:href="@{'/prenda/elimina/'+ ${prenda.idPrenda}}"
+							th:text="'Eliminar'"
+							onclick="return confirm('¿Esta seguro de eliminar la prenda?');"
+							class="btn btn-danger">Eliminar</a> 
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<nav th:replace="prenda/paginator-nav :: paginator"></nav>
+	</div>
+
+
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

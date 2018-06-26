@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+
+		<div class="card bg-light">
+			<div class="card-header text-white bg-dark">Prenda</div>
+			<div class="card-body">
+
+
+
+
+				<form th:action="@{/prenda/guarda}" th:object="${prenda}"
+					method="post">
+
+					<div class="form-group row">
+						<label for="marca" class="col-sm-2 col-form-label">Nombre</label>
+						<div class="col-sm-10">
+							<input type="text" th:field="*{nombrePrenda}"
+								class="form-control" id="nombre"
+								placeholder="Nombre de la prenda"
+								th:errorclass="'form-control alert-danger'" /> <small
+								class="form-text text-danger"
+								th:if="${#fields.hasErrors('nombrePrenda')}"
+								th:errors="*{nombrePrenda}"></small>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="marca" class="col-sm-2 col-form-label">Marca</label>
+						<div class="col-sm-10">
+							<input type="text" th:field="*{marcaPrenda}" class="form-control"
+								id="marca" placeholder="Marca de la prenda"
+								th:errorclass="'form-control alert-danger'" /> <small
+								class="form-text text-danger"
+								th:if="${#fields.hasErrors('marcaPrenda')}"
+								th:errors="*{marcaPrenda}"></small>
+						</div>
+					</div>
+
+
+
+					<div class="form-group row">
+						<label for="tipodeprenda" class="col-sm-2 col-form-label">Tipo
+							de prenda</label>
+						<div>
+							<select class="form-control"
+								th:field="*{tipoPrenda.idTipoPrenda}">
+								<option th:each="t: ${tiposPrenda}" th:value="${t.idTipoPrenda}"
+									th:text="${t.nombrePrenda}"></option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="marca" class="col-sm-2 col-form-label">Caracteristicas</label>
+						<div class="col-sm-10">
+							<input type="text" th:field="*{caracteristicasPrenda}" class="form-control"
+								id="caracteristicas" placeholder="Caracteristicas de la prenda"
+								th:errorclass="'form-control alert-danger'" /> <small
+								class="form-text text-danger"
+								th:if="${#fields.hasErrors('caracteristicasPrenda')}"
+								th:errors="*{caracteristicasPrenda}"></small>
+						</div>
+					</div>
+
+
+					<div class="form-group row">
+						<label for="buscar_servicio" class="col-sm-2 col-form-label"
+							th:text="'Buscar servicio'"></label>
+						<div class="col-sm-6">
+							<input type="text" name="buscar_servicio" id="buscar_servicio"
+								class="form-control" />
+						</div>
+					</div>
+
+					<table th:replace="prenda/plantilla-servicios :: servicioPrenda"></table>
+
+					<table id="cargarItemServicios"
+						class="table table-sm table-striped table-hover">
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Precio</th>
+								<th>Eliminar</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<input type="submit" th:value="${titulo}" class="btn btn-primary" />
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+	<script th:replace="prenda/js/autocomplete-servicios :: javascript"></script>
+</body>
+</html>

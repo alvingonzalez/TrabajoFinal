@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	
+	<div class="container py-4 ">
+
+		<div class="card bg-light ">
+			<div class="card-header text-white bg-dark" th:text="${titulo}"></div>
+			<div class="card-body">
+
+				
+
+
+				<ul class="list-group">
+					<li class="list-group-item active" th:text="${prenda.nombrePrenda}"></li>
+					<li class="list-group-item" th:text="${prenda.marcaPrenda}"></li>
+					<li class="list-group-item" th:text="${prenda.tipoPrenda.nombrePrenda}"></li>
+				</ul>
+
+
+			</div>
+
+		</div>
+
+		<div class="card bg-light">
+			<div class="card-header text-white bg-dark">Servicios</div>
+			<div class="card-body">
+
+				<div th:if="${#lists.isEmpty(prenda.detalleServicioPrenda)}"
+					class="alert alert-info my-4"
+					th:text="'No existen servicios asignadas a la prenda ' + ${prenda.nombrePrenda} + ' ' + ${prenda.marcaPrenda}"></div>
+
+				<table th:if="${not #lists.isEmpty(prenda.detalleServicioPrenda)}"
+					class="table">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Servicio</th>
+							<th>Precio</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="d: ${prenda.detalleServicioPrenda}">
+							<td th:text="${d.servicio.idServicio}"></td>
+							<td th:text="${d.servicio.nombreServicio}"></td>
+							<td th:text="${d.servicio.precioServicio}"></td>
+						
+							
+						</tr>
+					</tbody>
+
+				</table>
+
+			</div>
+		</div>
+	</div>
+
+	
+	
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

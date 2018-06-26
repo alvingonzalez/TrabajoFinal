@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+		<form th:action="@{/orden/guardar/}" th:object="${orden}"
+			method="post">
+			<div class="card ">
+
+
+				<div class="card-header text-white bg-dark" th:text="${titulo}"></div>
+				<div class="card-body">
+					<h4 class="card-title">
+						<a class="btn btn-light btn-xs"
+							th:href="@{'/cliente/detalle/' + ${orden.cliente.idCliente}}"
+							th:text="'&laquo; volver'"></a>
+					</h4>
+
+
+
+					<div class="form-group row">
+						<label for="cliente" class="col-sm-2 col-form-label"
+							th:text="'Cliente'"></label>
+						<div class="col-sm-6">
+							<input name="cliente"
+								th:value="${orden.cliente.nombreCliente} + ' ' + ${orden.cliente.apellidoCliente}"
+								class="form-control" disabled='disabled' />
+						</div>
+					</div>
+
+
+					
+					<div class="form-group row">
+						<label for="nombrePrenda" class="col-sm-2 col-form-label"
+							th:text="'Buscar Prenda'"></label>
+						<div class="col-sm-6">
+							<input type="text" name="buscarPrenda" id="buscarPrenda"
+								class="form-control" />
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<label for="marca" class="col-sm-2 col-form-label">Fecha Entrega </label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{fechaEntrega}" class="form-control"
+								id="fechaEntrega" placeholder="fecha de Entrega"
+								th:errorclass="'form-control alert-danger'" /> <small
+								class="form-text text-danger"
+								th:if="${#fields.hasErrors('fechaEntrega')}"
+								th:errors="*{fechaEntrega}"></small>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<label for="marca" class="col-sm-2 col-form-label">Estado Orden </label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{estadoOrden}" class="form-control"
+								id="estadoOrden" placeholder="Estado de Orden"
+								th:errorclass="'form-control alert-danger'" /> <small
+								class="form-text text-danger"
+								th:if="${#fields.hasErrors('estadoOrden')}"
+								th:errors="*{estadoOrden}"></small>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div class="card bg-light">
+				<div class="card-header text-white bg-dark">Linea de Orden</div>
+				<div class="card-body">
+					
+
+					<table id="cargarPrendas"
+						class="table table-sm table-striped table-hover">
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Marca</th>
+								<th>Tipo Prenda</th>
+								<th>Precio</th>
+								<th>Cantidad</th>
+								<th>Total</th>
+								<th>Eliminar</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					
+					<table th:replace="orden/template-items :: lineaOrden"></table>
+					
+					<h5>
+						Total <span class="badge badge-primary" id="gran_total">0</span>
+					</h5>
+
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<input type="submit" value="Guardar Orden" class="btn btn-primary" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+	<script th:replace="orden/js/autocomplete-prendas :: javascript"></script>
+</body>
+</html>

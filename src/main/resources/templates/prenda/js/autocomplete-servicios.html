@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<script type="text/javascript" th:fragment="javascript">
+		$(document).ready(function() {
+
+			$("#buscar_servicio").autocomplete({
+
+				source : function(request, response) {
+					$.ajax({
+						url : "/prenda/cargaServicios/" + request.term,
+						dataType : "json",
+						data : {
+							term : request.term
+						},
+						success : function(data) {
+							response($.map(data, function(item) {
+								return {
+									value : item.idServicio,
+									label : item.nombreServicio,
+									precio : item.precioServicio,
+								};
+							}));
+						},
+					});
+				},
+				
+				select : function(event, ui) {
+			
+					if(itemsHelper.hasServicio(ui.item.value)){
+						return false;
+						}
+					
+					var linea = $("#plantillaServiciosPrenda").html();
+					
+					linea = linea.replace(/{ID}/g, ui.item.value);
+					linea = linea.replace(/{NOMBRE}/g, ui.item.label);
+					linea = linea.replace(/{PRECIO}/g, ui.item.precio);
+					
+					$("#cargarItemServicios tbody").append(linea);
+
+					return false;
+				}
+			});
+			
+			$("form").submit(function(){
+				$("#plantillaServiciosPrenda").remove();
+				return;
+			});
+
+		});
+		
+		var itemsHelper = {
+				hasServicio: function(id){
+				
+				var resultado = false;
+				
+				$('input[name="servicio_id[]"]').each(function(){
+					if(parseInt(id) == parseInt($(this).val()) ){
+						resultado = true;
+					}
+				});
+				
+				return resultado;
+			},
+			
+			eliminarServicio: function(idServicio){
+				$("#row_" + idServicio).remove();
+			}
+		}
+	</script>
+</body>
+</html>

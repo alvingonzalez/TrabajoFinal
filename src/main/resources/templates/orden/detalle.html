@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<div class="container py-4">
+
+
+		<div class="card bg-light">
+			<div class="card-header text-white bg-dark" th:text="${titulo}"></div>
+			<div class="card-body">
+
+
+				<h4 class="card-title">
+					<a th:href="@{'/cliente/detalle/' + ${orden.cliente.idCliente}}"
+						class="btn btn-light btn-xs">&laquo; back</a>
+				</h4>
+
+				<ul class="list-group my-2">
+					<li class="list-group-item list-group-item-primary"
+						th:text="'Cliente'"></li>
+					<li class="list-group-item"
+						th:text="${orden.cliente.nombreCliente} + ${orden.cliente.apellidoCliente}"></li>
+					<li class="list-group-item"
+						th:text="${orden.cliente.correoCliente}"></li>
+				</ul>
+
+				<ul class="list-group my-2">
+					<li class="list-group-item list-group-item-success"
+						th:text="'Orden'"></li>
+					<li class="list-group-item" th:text="'Numero ' + ${orden.idOrden}"></li>
+					<li class="list-group-item"
+						th:text="'Fecha Solicitud: ' + ${orden.fechaSolicitud}"></li>
+					<li class="list-group-item"
+						th:text="'Fecha Entrega: ' + ${orden.fechaEntrega}"></li>
+				</ul>
+				<div class="alert alert-info my-4"
+					th:if="${#lists.isEmpty(orden.detalleOP)}"
+					th:text="'No existen lineas para la orden' + ${orden.idOrden}"></div>
+
+
+				<table th:if="${not #lists.isEmpty(orden.detalleOP)}"
+					class="table table-striped table-hover table-bordered my-3">
+					<thead>
+						<tr>
+							<th>Prenda</th>
+							<th>Caracteristicas</th>
+							<th>Cantidad</th>							
+							<th>Servicios</th>
+							<th>Total Servicios</th>
+							<th>Total Linea</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="linea: ${orden.detalleOP}">
+							<td th:text="${linea.prenda.tipoPrenda.nombrePrenda} +'  '+  ${linea.prenda.marcaPrenda} "></td>
+							<td th:text="${linea.prenda.caracteristicasPrenda}"></td>
+							<td th:text="${linea.cantidad}"></td>
+							
+							<td >
+							
+							<ul class="list-group my-2"
+								th:each="ds: ${linea.prenda.detalleServicioPrenda}">
+								<li class="list-group-item" th:text="${ds.servicio.nombreServicio} + ' ' + ${ds.servicio.precioServicio}"></li>
+							</ul>
+								
+							
+							</td>
+							<td th:text="${linea.prenda.getTotalPrenda()}"></td>
+							<td th:text="${linea.getMontoLinea()}"></td>
+						</tr>
+					</tbody>
+
+				</table>
+
+			
+
+				<h5 class="float-right">
+					Gran Total <span th:text="${orden.granTotal()}"
+						class="badge badge-secondary"></span>
+				</h5>
+
+
+
+				<a th:href="@{'/cliente/detalle/' + ${orden.cliente.idCliente}}"
+					class="btn btn-light btn-xs">&laquo; back</a>
+
+			</div>
+		</div>
+
+	</div>
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>
